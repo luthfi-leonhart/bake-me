@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ingredient_header_tv"
+        style="@style/HeaderTextStyle"
+        android:drawableEnd="@drawable/ic_arrow_down"
+        android:drawableRight="@drawable/ic_arrow_down"
+        android:text="@string/recipe_ingredients" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ingredient_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/list_item_ingredient" />
+
+</LinearLayout>

@@ -1,0 +1,79 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.upwardproject.bakeme.ui.recipe_step.RecipeStepDetailActivity"
+    tools:ignore="MergeRootFrame">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include layout="@layout/toolbar" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/detail_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <ImageView
+                android:id="@+id/previous_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/previous"
+                android:padding="@dimen/layout_small_margin"
+                app:srcCompat="@drawable/ic_arrow_left" />
+
+            <ImageView
+                android:id="@+id/next_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/next"
+                android:padding="@dimen/layout_small_margin"
+                app:srcCompat="@drawable/ic_arrow_right" />
+
+            <TextView
+                android:id="@+id/step_index_info_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@id/previous_iv"
+                android:layout_toLeftOf="@id/next_iv"
+                android:layout_toRightOf="@id/previous_iv"
+                android:layout_toStartOf="@id/next_iv"
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                tools:text="Step x of y" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
