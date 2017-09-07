@@ -10,6 +10,7 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="backdrop_height">200dp</dimen>
+    <dimen name="video_height">260dp</dimen>
     <dimen name="video_thumbnail_width">154dp</dimen>
     <dimen name="video_thumbnail_height">100dp</dimen>
 
