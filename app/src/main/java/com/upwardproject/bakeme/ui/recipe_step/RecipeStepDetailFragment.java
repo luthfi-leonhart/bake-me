@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ import butterknife.Unbinder;
  */
 public class RecipeStepDetailFragment extends Fragment implements Player.EventListener {
     private static final String TAG = "step_detail";
-
+    // TODO video landscape
     @BindView(R.id.step_image_iv)
     ImageView ivImage;
     @BindView(R.id.video_player)
@@ -252,7 +251,6 @@ public class RecipeStepDetailFragment extends Fragment implements Player.EventLi
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-        Log.d("cek", "error");
     }
 
     @Override

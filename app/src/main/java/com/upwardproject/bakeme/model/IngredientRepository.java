@@ -1,5 +1,11 @@
 package com.upwardproject.bakeme.model;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+
+import com.upwardproject.bakeme.database.DatabaseContract;
+import com.upwardproject.bakeme.database.DatabaseProvider;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,6 +43,26 @@ public class IngredientRepository {
         return new Ingredient(jsonObject.optString(PARAM_NAME))
                 .setQuantity(jsonObject.optInt(PARAM_QUANTITY))
                 .setMeasure(jsonObject.optString(PARAM_MEASURE));
+    }
+
+    public static int saveToLocal(ContentResolver resolver, List<Ingredient> ingredients) {
+        ContentValues[] values = new ContentValues[ingredients.size()];
+
+        for (int i = 0; i < ingredients.size(); i++) {
+            Ingredient ingredient = ingredients.get(i);
+            values[i] = getContentValues(ingredient);
+        }
+
+        return resolver.bulkInsert(DatabaseProvider.Ingredients.CONTENT_URI, values);
+    }
+
+    private static ContentValues getContentValues(Ingredient ingredient) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.IngredientEntry.INGREDIENT, ingredient.getName());
+        values.put(DatabaseContract.IngredientEntry.MEASURE, ingredient.getMeasure());
+        values.put(DatabaseContract.IngredientEntry.QUANTITY, ingredient.getQuantity());
+
+        return values;
     }
 
 }

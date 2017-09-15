@@ -37,6 +37,11 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+        
+        <provider
+            android:authorities="com.upwardproject.bakeme.provider"
+            android:name=".provider.DatabaseProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

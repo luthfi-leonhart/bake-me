@@ -44,7 +44,7 @@ public class RecipeListFragment extends BaseListFragment implements RecipeContra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPresenter = new RecipeListPresenter(this);
+        mPresenter = new RecipeListPresenter(this, getContext().getContentResolver());
     }
 
     @Override

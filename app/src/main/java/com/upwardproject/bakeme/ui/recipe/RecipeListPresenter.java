@@ -1,5 +1,7 @@
 package com.upwardproject.bakeme.ui.recipe;
 
+import android.content.ContentResolver;
+
 import com.upwardproject.bakeme.model.Recipe;
 import com.upwardproject.bakeme.model.RecipeRepository;
 import com.upwardproject.bakeme.util.network.RemoteCallback;
@@ -13,9 +15,11 @@ import java.util.List;
 class RecipeListPresenter implements RecipeContract.RecipeListAction {
 
     private RecipeContract.RecipeListView view;
+    private ContentResolver resolver;
 
-    RecipeListPresenter(RecipeContract.RecipeListView view) {
+    RecipeListPresenter(RecipeContract.RecipeListView view, ContentResolver resolver) {
         this.view = view;
+        this.resolver = resolver;
     }
 
     @Override
@@ -24,6 +28,8 @@ class RecipeListPresenter implements RecipeContract.RecipeListAction {
         RecipeRepository.list(new RemoteCallback.Load<List<Recipe>>() {
             @Override
             public void onDataLoaded(List<Recipe> data) {
+                RecipeRepository.saveToLocal(resolver, data);
+
                 view.onRecipeListLoaded(data);
                 view.setProgressIndicator(false);
             }

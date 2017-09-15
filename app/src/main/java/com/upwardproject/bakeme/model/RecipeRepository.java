@@ -1,6 +1,11 @@
 package com.upwardproject.bakeme.model;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+
 import com.upwardproject.bakeme.constant.ServerApi;
+import com.upwardproject.bakeme.database.DatabaseContract;
+import com.upwardproject.bakeme.database.DatabaseProvider;
 import com.upwardproject.bakeme.util.network.JsonDataReceiver;
 import com.upwardproject.bakeme.util.network.RemoteCallback;
 import com.upwardproject.bakeme.util.network.ServerRestClient;
@@ -75,6 +80,30 @@ public class RecipeRepository {
         recipe.setSteps(steps);
 
         return recipe;
+    }
+
+    public static int saveToLocal(ContentResolver resolver, List<Recipe> recipes) {
+        ContentValues[] values = new ContentValues[recipes.size()];
+
+        for (int i = 0; i < recipes.size(); i++) {
+            Recipe recipe = recipes.get(i);
+
+            IngredientRepository.saveToLocal(resolver, recipe.getIngredients());
+
+            values[i] = getContentValues(recipe);
+        }
+
+        return resolver.bulkInsert(DatabaseProvider.Recipe.CONTENT_URI, values);
+    }
+
+    private static ContentValues getContentValues(Recipe recipe) {
+        ContentValues values = new ContentValues();
+        values.put(DatabaseContract.RecipeEntry.ID, recipe.getId());
+        values.put(DatabaseContract.RecipeEntry.NAME, recipe.getName());
+        values.put(DatabaseContract.RecipeEntry.SERVINGS, recipe.getServings());
+        values.put(DatabaseContract.RecipeEntry.IMAGE_URL, recipe.getImageUrl());
+
+        return values;
     }
 
 }
