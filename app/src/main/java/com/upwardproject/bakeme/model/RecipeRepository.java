@@ -88,7 +88,7 @@ public class RecipeRepository {
         for (int i = 0; i < recipes.size(); i++) {
             Recipe recipe = recipes.get(i);
 
-            IngredientRepository.saveToLocal(resolver, recipe.getIngredients());
+            IngredientRepository.saveToLocal(resolver, recipe.getId(), recipe.getIngredients());
 
             values[i] = getContentValues(recipe);
         }

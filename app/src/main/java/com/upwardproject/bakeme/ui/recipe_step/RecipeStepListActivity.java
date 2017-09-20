@@ -8,16 +8,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.upwardproject.bakeme.R;
+import com.upwardproject.bakeme.constant.Settings;
 import com.upwardproject.bakeme.model.Ingredient;
 import com.upwardproject.bakeme.model.Recipe;
 import com.upwardproject.bakeme.model.RecipeRepository;
 import com.upwardproject.bakeme.model.RecipeStep;
 import com.upwardproject.bakeme.ui.BaseActivity;
 import com.upwardproject.bakeme.ui.ItemClickListener;
+import com.upwardproject.bakeme.ui.app_widget.IngredientWidgetService;
 import com.upwardproject.bakeme.util.ActivityUtil;
 
 import java.util.List;
@@ -42,6 +46,8 @@ public class RecipeStepListActivity extends BaseActivity implements ItemClickLis
     RecyclerView rvIngredients;
     @BindView(R.id.recipe_step_list)
     RecyclerView rvSteps;
+
+    MenuItem itemWidget;
 
     private Recipe mRecipe;
 
@@ -147,5 +153,50 @@ public class RecipeStepListActivity extends BaseActivity implements ItemClickLis
             Intent intent = RecipeStepDetailActivity.newInstance(this, mRecipe, position);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_recipe, menu);
+
+        itemWidget = menu.findItem(R.id.ac_widget);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        setWidgetMenuState();
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.ac_widget:
+                int widgetRecipeId = Settings.getInstance().getInt(Settings.Key.SELECTED_RECIPE_ID);
+                boolean isWidgetRecipe = mRecipe.getId() == widgetRecipeId;
+
+                if (isWidgetRecipe) Settings.getInstance().remove(Settings.Key.SELECTED_RECIPE_ID);
+                else Settings.getInstance().put(Settings.Key.SELECTED_RECIPE_ID, mRecipe.getId());
+
+                supportInvalidateOptionsMenu();
+
+                IngredientWidgetService.startActionUpdateRecipeWidget(this);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setWidgetMenuState(){
+        int widgetRecipeId = Settings.getInstance().getInt(Settings.Key.SELECTED_RECIPE_ID);
+        boolean isWidgetRecipe = mRecipe.getId() == widgetRecipeId;
+
+        int iconResId = isWidgetRecipe ? R.drawable.ic_widgets_selected : R.drawable.ic_widgets;
+        int textResId = isWidgetRecipe ? R.string.recipe_widget_remove : R.string.recipe_widget_add;
+
+        itemWidget.setIcon(iconResId);
+        itemWidget.setTitle(textResId);
     }
 }

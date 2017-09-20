@@ -45,22 +45,23 @@ public class IngredientRepository {
                 .setMeasure(jsonObject.optString(PARAM_MEASURE));
     }
 
-    public static int saveToLocal(ContentResolver resolver, List<Ingredient> ingredients) {
+    public static int saveToLocal(ContentResolver resolver, int recipeId, List<Ingredient> ingredients) {
         ContentValues[] values = new ContentValues[ingredients.size()];
 
         for (int i = 0; i < ingredients.size(); i++) {
             Ingredient ingredient = ingredients.get(i);
-            values[i] = getContentValues(ingredient);
+            values[i] = getContentValues(recipeId, ingredient);
         }
 
         return resolver.bulkInsert(DatabaseProvider.Ingredients.CONTENT_URI, values);
     }
 
-    private static ContentValues getContentValues(Ingredient ingredient) {
+    private static ContentValues getContentValues(int recipeId, Ingredient ingredient) {
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.IngredientEntry.INGREDIENT, ingredient.getName());
         values.put(DatabaseContract.IngredientEntry.MEASURE, ingredient.getMeasure());
         values.put(DatabaseContract.IngredientEntry.QUANTITY, ingredient.getQuantity());
+        values.put(DatabaseContract.IngredientEntry.RECIPE_ID, recipeId);
 
         return values;
     }

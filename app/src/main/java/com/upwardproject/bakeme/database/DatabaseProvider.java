@@ -50,7 +50,6 @@ public final class DatabaseProvider {
                 type = "vnd.android.cursor.item/recipe",
                 whereColumn = DatabaseContract.RecipeEntry.ID,
                 pathSegment = 1)
-
         public static Uri withId(long id) {
             return buildUri(Path.RECIPES, String.valueOf(id));
         }
@@ -65,7 +64,7 @@ public final class DatabaseProvider {
         public static final Uri CONTENT_URI = buildUri(Path.INGREDIENTS);
 
         @InexactContentUri(
-                name = "INGREDIENTS_FROM_RECIPE",
+                name = "FROM_RECIPE",
                 path = Path.INGREDIENTS + "/" + Path.FROM_RECIPE + "/#",
                 type = "vnd.android.cursor.dir/recipes",
                 whereColumn = DatabaseContract.IngredientEntry.RECIPE_ID,
