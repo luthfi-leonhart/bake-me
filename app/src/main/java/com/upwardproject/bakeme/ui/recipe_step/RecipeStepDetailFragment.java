@@ -71,6 +71,7 @@ public class RecipeStepDetailFragment extends Fragment implements Player.EventLi
     private MediaSource mediaSource;
 
     private RecipeStep mStep;
+    private long mVideoPosition;
 
     public static RecipeStepDetailFragment newInstance(RecipeStep step) {
         RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
@@ -190,16 +191,18 @@ public class RecipeStepDetailFragment extends Fragment implements Player.EventLi
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putLong(PARAM_VIDEO_POSITION, exoPlayer.getCurrentPosition());
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (exoPlayer != null) {
+            initializePlayer(Uri.parse(mStep.getVideoUrl()));
+        }
     }
 
     @Override
@@ -219,10 +222,19 @@ public class RecipeStepDetailFragment extends Fragment implements Player.EventLi
      */
     private void releasePlayer() {
         if (exoPlayer != null) {
+            mVideoPosition = exoPlayer.getCurrentPosition();
+
             exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(PARAM_VIDEO_POSITION, mVideoPosition);
     }
 
     @Override
