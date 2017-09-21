@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,8 @@ import butterknife.Unbinder;
  */
 public class RecipeStepDetailFragment extends Fragment implements Player.EventListener {
     private static final String TAG = "step_detail";
-    // TODO video landscape
+    private static final String PARAM_VIDEO_POSITION = "video_position";
+    // TODO: video landscape
     @BindView(R.id.step_image_iv)
     ImageView ivImage;
     @BindView(R.id.video_player)
@@ -101,22 +103,27 @@ public class RecipeStepDetailFragment extends Fragment implements Player.EventLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (mStep.getThumbnailUrl() != null && !mStep.getThumbnailUrl().isEmpty()) {
+        if (!TextUtils.isEmpty(mStep.getThumbnailUrl())) {
             ivImage.setVisibility(View.VISIBLE);
-            Glide.with(getContext())
+            Glide.with(this)
                     .load(mStep.getThumbnailUrl())
                     .placeholder(R.color.colorPrimaryLight)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .into(ivImage);
         } else ivImage.setVisibility(View.GONE);
 
-        if (mStep.getVideoUrl() != null && !mStep.getVideoUrl().isEmpty()) {
+        if (!TextUtils.isEmpty(mStep.getVideoUrl())) {
             exoPlayerView.setVisibility(View.VISIBLE);
             initializeMediaSession();
             initializePlayer(Uri.parse(mStep.getVideoUrl()));
         } else exoPlayerView.setVisibility(View.GONE);
 
         tvDescription.setText(mStep.getDescription());
+
+        if (savedInstanceState != null) {
+            long currentPosition = savedInstanceState.getLong(PARAM_VIDEO_POSITION);
+            exoPlayer.seekTo(currentPosition);
+        }
     }
 
     /**
@@ -183,9 +190,27 @@ public class RecipeStepDetailFragment extends Fragment implements Player.EventLi
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(PARAM_VIDEO_POSITION, exoPlayer.getCurrentPosition());
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         releasePlayer();
     }
 

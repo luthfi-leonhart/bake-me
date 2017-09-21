@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
@@ -174,6 +175,9 @@ public class RecipeStepListActivity extends BaseActivity implements ItemClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpTo(this, NavUtils.getParentActivityIntent(this));
+                return true;
             case R.id.ac_widget:
                 int widgetRecipeId = Settings.getInstance().getInt(Settings.Key.SELECTED_RECIPE_ID);
                 boolean isWidgetRecipe = mRecipe.getId() == widgetRecipeId;
@@ -199,4 +203,5 @@ public class RecipeStepListActivity extends BaseActivity implements ItemClickLis
         itemWidget.setIcon(iconResId);
         itemWidget.setTitle(textResId);
     }
+
 }
