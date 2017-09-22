@@ -38,10 +38,28 @@ public class ActivityUtil {
         transaction.commit();
     }
 
+    public static void addFragmentToActivity(@NonNull FragmentManager fragmentManager,
+                                             @NonNull Fragment fragment, String fragmentTag,
+                                             int frameId, boolean addToBackStack) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(frameId, fragment, fragmentTag);
+        if (addToBackStack) transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     public static void replaceFragment(@NonNull FragmentManager fragmentManager,
                                        @NonNull Fragment fragment, int frameId, boolean addToBackStack) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(frameId, fragment);
+        if (addToBackStack) transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public static void replaceFragment(@NonNull FragmentManager fragmentManager,
+                                       @NonNull Fragment fragment, String fragmentTag,
+                                       int frameId, boolean addToBackStack) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(frameId, fragment, fragmentTag);
         if (addToBackStack) transaction.addToBackStack(null);
         transaction.commit();
     }

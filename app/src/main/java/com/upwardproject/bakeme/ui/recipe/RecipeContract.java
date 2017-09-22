@@ -2,6 +2,7 @@ package com.upwardproject.bakeme.ui.recipe;
 
 import com.upwardproject.bakeme.model.Recipe;
 import com.upwardproject.bakeme.ui.BaseContract;
+import com.upwardproject.bakeme.ui.SimpleIdlingResource;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public class RecipeContract {
     }
 
     interface RecipeListAction {
-        void loadRecipeList();
+        void loadRecipeList(SimpleIdlingResource idlingResource);
     }
 }

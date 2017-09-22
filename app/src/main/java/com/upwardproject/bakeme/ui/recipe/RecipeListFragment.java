@@ -16,6 +16,7 @@ import com.upwardproject.bakeme.model.Recipe;
 import com.upwardproject.bakeme.ui.BaseActivity;
 import com.upwardproject.bakeme.ui.BaseListFragment;
 import com.upwardproject.bakeme.ui.ItemClickListener;
+import com.upwardproject.bakeme.ui.SimpleIdlingResource;
 import com.upwardproject.bakeme.ui.recipe_step.RecipeStepListActivity;
 import com.upwardproject.bakeme.ui.widget.ItemOffsetDecoration;
 import com.upwardproject.bakeme.util.network.NetworkUtil;
@@ -30,7 +31,8 @@ import butterknife.Unbinder;
 public class RecipeListFragment extends BaseListFragment implements RecipeContract.RecipeListView,
         ItemClickListener {
 
-    private static final String PARAM_LIST = "movie_list";
+    public static final String TAG = "recipe_list";
+    private static final String PARAM_LIST = "recipe_list";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -40,11 +42,15 @@ public class RecipeListFragment extends BaseListFragment implements RecipeContra
     private ArrayList<Recipe> mItemList;
     private RecipeListPresenter mPresenter;
 
+    private SimpleIdlingResource mIdlingResource;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mPresenter = new RecipeListPresenter(this, getContext().getContentResolver());
+
+        mIdlingResource = ((RecipeListActivity) getActivity()).mIdlingResource;
     }
 
     @Override
@@ -83,11 +89,12 @@ public class RecipeListFragment extends BaseListFragment implements RecipeContra
             return;
         }
 
-        mPresenter.loadRecipeList();
+        mPresenter.loadRecipeList(mIdlingResource);
     }
 
     @Override
     public void onRecipeListLoaded(List<Recipe> recipes) {
+
         if (recipes == null) return;
 
         if (pageToLoad == 1 || adapter == null) {
@@ -139,5 +146,6 @@ public class RecipeListFragment extends BaseListFragment implements RecipeContra
         super.onDestroyView();
         unbinder.unbind();
     }
+
 
 }
